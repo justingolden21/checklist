@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Checklist</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A simple checklist app that lets you download and upload your lists">
+  <meta name="keywords" content="checklist, todolist, todo, to-do, list, track, simple, easy">
+
+  <!-- Mobile Nav-bar Colors -->
+  <!-- Chrome, Firefox OS and Opera -->
+  <meta id="meta1" name="theme-color" content="#d9edf7">
+  <!-- Windows Phone -->
+  <meta id="meta2" name="msapplication-navbutton-color" content="#d9edf7">
+  <!-- iOS Safari -->
+  <meta id="meta3" name="apple-mobile-web-app-status-bar-style" content="#d9edf7">
+  
+<style>
+
+body {
+  text-align: center;
+  font-family: "Roboto", sans-serif !important;	
+}
+.checklist-container {
+  max-height: 50vh; 
+  overflow-y: scroll; 
+  overflow-wrap: break-word;
+  text-align: left;
+  margin-right: 20px;
+}
+li {
+  list-style-type: none;
+  padding: 5px;
+}
+li:hover, li:hover small {
+  background-color: rgb(51,122,183);
+  color: #fff;
+}
+input{
+  margin-top:5px !important;
+}
+button{
+  margin:5px !important;
+}
+.bg-warning{
+  display:inline-block;
+  padding: 5px;
+}
+.bg-warning:empty { /*remove highlight if no errortext*/
+  background-color: transparent;
+}
+.fab, .far{ /*font awesome*/
+  font-size: 30px;
+}
+* {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+::selection {
+  background: #d9edf7; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: #d9edf7; /* Gecko Browsers */
+}
+</style>
+</head>
+
+<!--
+NEED TO ADD:
+split into different files
+upload to github
+
+COULD ADD:
+track and sort by date entered, date due. list history/date completed
+fullscreen button
+edit item option
+
+BUGS:
+-->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+
+<link rel="shortcut icon" type="image/png" href="check_icon.ico"/>
+<body>
+
+<script>
+let app = angular.module("listApp", []); 
+app.controller("listCtrl", function($scope) {
+  $scope.items = ["Homework", "Laundry", "Dishes"];
+  $scope.night = false;
+  $scope.addItem = function () {
+    $scope.errortext = "";
+    if (!$scope.addMe) {return;}        
+    if ($scope.items.indexOf($scope.addMe) == -1) {
+      $scope.items.push($scope.addMe);
+	  $scope.addMe = "";
+    }
+	else {
+      $scope.errortext = "That item is already in your list";
+    }
+      $('#textInput').focus();
+  }
+  $scope.removeItem = function (idx) {
+    $scope.errortext = "";
+    $scope.items.splice(idx, 1);
+  }
+  $scope.removeAll = function() {
+    $scope.errortext = "";
+	$scope.items = [];
+  }
+  $scope.clearInput = function() {
+	$scope.errortext = "";
+	$scope.addMe = "";
+	$('#textInput').focus();
+  }
+  $scope.toggleNight = function() {
+	$scope.errortext = "";
+	$scope.night = !$scope.night;
+	$(document.body).css("background-color", $scope.night ? "#333" : "");
+  }
+  $scope.sort = function() {
+	$scope.errortext = "";
+	$scope.items.sort();
+  }
+  $scope.download = function() {
+	$scope.errortext = "";
+	let text = []
+	for(item in $scope.items) {
+	  text.push($scope.items[item] + "\r\n");
+	}
+	let data = new Blob(text, {type: "text/plain"});
+	let textFile = window.URL.createObjectURL(data);
+	document.getElementById("downloadLink").download = "Checklist " + getFormattedDate();
+	document.getElementById("downloadLink").href = textFile;
+  }
+
+
+//https://stackoverflow.com/questions/19038919/is-it-possible-to-upload-a-text-file-to-input-in-html-js?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+$("document").ready(function() {
+  $("#fileInput").change(function() {
+  $scope.errortext = "";
+  if (!window.FileReader) { return; } //browser not supported
+    let input = $('#fileInput').get(0);
+    let reader = new FileReader();
+    if (input.files.length) { //file exists
+      let textFile = input.files[0];
+      reader.readAsText(textFile);
+      $(reader).on("load", processFile);
+    }
+  });
+});
+
+function processFile(e) {
+  let file = e.target.result, results;
+  if (file && file.length) {
+    results = file.split("\n");
+    for(let i=0; i<results.length-1; i++) {
+	  if(results[i].trim() != ""){
+		$scope.items.push(results[i]);
+	  }
+	}
+	$scope.$apply(); //refresh angular
+  }
+}
+
+}); //end app controller
+
+function getFormattedDate() {
+  let today = new Date();
+  let day = today.getDate();
+  let mon = today.getMonth()+1; //Jan is 0
+  day = day < 10 ? "0" + day : day;
+  mon = mon < 10 ? "0" + mon : mon;
+  return mon + "-" + day + "-" + today.getFullYear();	
+}
+</script>
+
+<form ng-app="listApp" ng-controller="listCtrl" ng-submit="addItem()">
+  <h2 class="text-primary"><i class="material-icons">check_circle</i>Checklist  <br> <small>you have <span class="badge">{{items.length}}</span> items</small></h2>
+  <div class="checklist-container">
+  <ul>
+    <h4 class="bg-info list">
+	<li  ng-repeat="x in items">
+	  <button class="btn btn-danger btn-xs" title="Clear" type="button" tabindex="-1" ng-click="removeItem($index)"><i class="material-icons">close</i></button>
+	<small>{{$index+1 + ". "}}</small> {{ x}}</li></h4>
+  </ul>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-sm-6 col-md-8 col-xs-12">
+	  <div class="input-group">
+		<span class="input-group-btn">
+		  <button  class="btn btn-danger" title="Clear Input" type="button" ng-click="clearInput()"><i class="material-icons">clear</i></button>
+		</span>
+		<input id="textInput" autofocus maxlength="10000" type="text" class="form-control" placeholder="Type your item..." ng-model="addMe">
+		<span class="input-group-btn">
+		  <button class="btn btn-primary" title="Add" type="submit" ng-click="addItem()"><i class="material-icons">send</i></button> 
+        </span>
+	  </div>
+	</div>
+    <div class="col-sm-6 col-md-4 col-xs-12 input-group">
+	  <button class="btn btn-danger" title="Clear All" type="button" ng-click="removeAll()"><i class="material-icons">delete_sweep</i></button>
+	  <button class="btn btn-default" title="Night Mode" type="button" ng-click="toggleNight()"><i class="material-icons">brightness_3</i></button>
+	  <button class="btn btn-info" title="Sort" type="button" ng-click="sort()"><i class="material-icons">sort_by_alpha</i></button>
+	  <a style="text-decoration:none;" id="downloadLink" target="_blank">
+	    <button class="btn btn-info" title="Download" type="button" ng-click="download()"><i class="material-icons">file_download</i></button>
+	  </a>
+      <input style="display:none;" type="file" accept=".txt" id="fileInput">
+	  <button class="btn btn-info" onclick="document.getElementById('fileInput').click()" title="Upload" type="button"><i class="material-icons">file_upload</i></button>
+
+    </div>
+  </div>
+  <h4 class="bg-warning">{{errortext}}</h4>
+</form>
+
+<hr>
+
+<div class="alert alert-info alert-dismissible">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  <p class="bg-info">Use <kbd>Enter</kbd> or the arrow button to add items</p>
+</div>
+<div class="alert alert-info alert-dismissible">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  <p class="text-info"><i class="material-icons">info</i> Your Ad Blocker might prevent you from downloading your text file</p>
+</div>
+
+<hr>
+
+<p class="text-secondary">Made by justingolden21 &mdash; Check out my other projects on <a href="https://github.com/justingolden21">Github</a></p>
+<button class="btn btn-info" title="Github" onclick="window.open('https://github.com/justingolden21')" type="button"><i class="fab fa-github"></i></button>
+<button class="btn btn-info" title="Email" onclick="window.open('mailto:justingolden@rgbstudios.org')" type="button"><i class="far fa-envelope"></i></button>
+</body>
+</html>
