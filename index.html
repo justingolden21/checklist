@@ -115,10 +115,7 @@ app.controller("listCtrl", function($scope) {
 	$scope.items.sort();
   }
   $scope.download = function() {
-	let text = []
-	for(item in $scope.items) {
-	  text.push($scope.items[item] + "\r\n");
-	}
+	let text = [$scope.items.join('\r\n')];
 	let data = new Blob(text, {type: "text/plain"});
 	let textFile = window.URL.createObjectURL(data);
 	document.getElementById("downloadLink").download = "Checklist " + getFormattedDate();
@@ -207,7 +204,7 @@ function getFormattedDate() {
 	    <button class="btn btn-info" title="Download" type="button" ng-click="download()"><i class="material-icons">file_download</i></button>
 	  </a>
       <input style="display:none;" type="file" accept=".txt" id="fileInput">
-	  <button class="btn btn-info" onclick="document.getElementById('fileInput').click()" title="Upload" type="button"><i class="material-icons">file_upload</i></button>
+	  <button class="btn btn-info" onclick="$('#fileInput').click();" title="Upload" type="button"><i class="material-icons">file_upload</i></button>
 
     </div>
   </div>
