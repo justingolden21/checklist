@@ -45,14 +45,11 @@ button{
 .bg-warning:empty { /*remove highlight if no errortext*/
   background-color: transparent;
 }
-.fab, .far, .fas { /*font awesome*/
-  font-size: 30px;
-}
 ::selection {
-  background: #d9edf7; /* WebKit/Blink Browsers */
+  background: #d9edf7;
 }
 ::-moz-selection {
-  background: #d9edf7; /* Gecko Browsers */
+  background: #d9edf7;
 }
 </style>
 </head>
@@ -71,7 +68,6 @@ BUGS:
 
 -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-<link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -235,9 +231,7 @@ function getFormattedDate() {
 
 <hr>
 
-<p class="text-secondary">Made by justingolden21 &mdash; Check out my other projects on <a href="https://github.com/justingolden21">Github</a></p>
-<button class="btn btn-info" title="Github" onclick="window.open('https://github.com/justingolden21')" type="button"><i class="fab fa-github"></i></button>
-<button class="btn btn-info" title="Email" onclick="window.open('mailto:justingolden@rgbstudios.org')" type="button"><i class="fas fa-envelope"></i></button>
+<p class="text-secondary">Made by <a href="https://justingolden21.github.io" target="_blank">justingolden21</a> &mdash; Check out my other projects on <a href="https://github.com/justingolden21" target="_blank">Github</a></p>
 <p class="text-secondary">This website uses cookies to remember your checklist <a href="" ng-click="removeCookies()">clear cookies</a></p>
 
 </form>
