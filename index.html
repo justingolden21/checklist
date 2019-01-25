@@ -51,6 +51,9 @@ button{
 ::-moz-selection {
   background: #d9edf7;
 }
+kbd {
+  background-color: #31708f !important;
+}
 </style>
 </head>
 
@@ -206,17 +209,13 @@ function getFormattedDate() {
   <h4 class="bg-warning">{{errortext}}</h4>
 
 <hr>
+<br>
 
 <div class="alert alert-info alert-dismissible">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  <p class="bg-info">Use <kbd>Enter</kbd> or the arrow button to add items</p>
-</div>
-<div class="alert alert-info alert-dismissible">
-  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  <p class="bg-info">Use <kbd>Enter</kbd> or <i class="material-icons">send</i> to add items</p>
   <p class="text-info"><i class="material-icons">info</i> Your Ad Blocker might prevent you from downloading your text file</p>
 </div>
-
-<hr>
 
 <p class="text-secondary">Made by <a href="https://justingolden21.github.io" target="_blank">justingolden21</a> &mdash; Check out my other projects on <a href="https://github.com/justingolden21" target="_blank">Github</a></p>
 <p class="text-secondary">This website uses cookies to remember your checklist ~ <a href="" ng-click="removeCookies()">clear cookies</a></p>
