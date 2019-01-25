@@ -7,12 +7,8 @@
   <meta name="description" content="A simple checklist app that lets you download and upload your lists">
   <meta name="keywords" content="checklist, todolist, todo, to-do, list, track, simple, easy">
 
-  <!-- Mobile Nav-bar Colors -->
-  <!-- Chrome, Firefox OS and Opera -->
   <meta id="meta1" name="theme-color" content="#d9edf7">
-  <!-- Windows Phone -->
   <meta id="meta2" name="msapplication-navbutton-color" content="#d9edf7">
-  <!-- iOS Safari -->
   <meta id="meta3" name="apple-mobile-web-app-status-bar-style" content="#d9edf7">
   
 <style>
@@ -37,10 +33,10 @@ li:hover, li:hover small {
   color: #fff;
 }
 input{
-  margin-top:5px !important;
+  margin-top: 5px !important;
 }
 button{
-  margin:5px !important;
+  margin: 5px !important;
 }
 .bg-warning{
   display:inline-block;
@@ -49,16 +45,8 @@ button{
 .bg-warning:empty { /*remove highlight if no errortext*/
   background-color: transparent;
 }
-.fab, .far{ /*font awesome*/
+.fab, .far, .fas { /*font awesome*/
   font-size: 30px;
-}
-* {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
 }
 ::selection {
   background: #d9edf7; /* WebKit/Blink Browsers */
@@ -69,10 +57,10 @@ button{
 </style>
 </head>
 
-<!--
+<!-- NOTES
+
 NEED TO ADD:
 split into different files
-upload to github
 
 COULD ADD:
 track and sort by date entered, date due. list history/date completed
@@ -80,6 +68,7 @@ fullscreen button
 edit item option
 
 BUGS:
+
 -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 <link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
@@ -126,6 +115,7 @@ app.controller("listCtrl", function($scope) {
 	$scope.errortext = "";
 	$scope.night = !$scope.night;
 	$(document.body).css("background-color", $scope.night ? "#333" : "");
+	$('.text-secondary').css("color", $scope.night ? "#fff" : "");
   }
   $scope.sort = function() {
 	$scope.errortext = "";
@@ -177,7 +167,7 @@ function processFile(e) {
 function getFormattedDate() {
   let today = new Date();
   let day = today.getDate();
-  let mon = today.getMonth()+1; //Jan is 0
+  let mon = today.getMonth()+1; // Jan is 0
   day = day < 10 ? "0" + day : day;
   mon = mon < 10 ? "0" + mon : mon;
   return mon + "-" + day + "-" + today.getFullYear();	
@@ -185,7 +175,7 @@ function getFormattedDate() {
 </script>
 
 <form ng-app="listApp" ng-controller="listCtrl" ng-submit="addItem()">
-  <h2 class="text-primary"><i class="material-icons">check_circle</i>Checklist  <br> <small>you have <span class="badge">{{items.length}}</span> items</small></h2>
+  <h2 class="text-primary"><i class="material-icons">check_circle</i>Checklist  <br> <small class="text-secondary">you have <span class="badge">{{items.length}}</span> items</small></h2>
   <div class="checklist-container">
   <ul>
     <h4 class="bg-info list">
@@ -237,6 +227,6 @@ function getFormattedDate() {
 
 <p class="text-secondary">Made by justingolden21 &mdash; Check out my other projects on <a href="https://github.com/justingolden21">Github</a></p>
 <button class="btn btn-info" title="Github" onclick="window.open('https://github.com/justingolden21')" type="button"><i class="fab fa-github"></i></button>
-<button class="btn btn-info" title="Email" onclick="window.open('mailto:justingolden@rgbstudios.org')" type="button"><i class="far fa-envelope"></i></button>
+<button class="btn btn-info" title="Email" onclick="window.open('mailto:justingolden@rgbstudios.org')" type="button"><i class="fas fa-envelope"></i></button>
 </body>
 </html>
