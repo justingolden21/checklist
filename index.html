@@ -76,7 +76,6 @@ BUGS:
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
 <link rel="shortcut icon" type="image/png" href="check_icon.ico"/>
-<body>
 
 <script>
 let app = angular.module("listApp", []); 
@@ -179,6 +178,8 @@ function getFormattedDate() {
   return mon + "-" + day + "-" + today.getFullYear();	
 }
 </script>
+
+<body class="container">
 
 <form ng-app="listApp" ng-controller="listCtrl" ng-submit="addItem()">
   <h2 class="text-primary"><i class="material-icons">check_circle</i>Checklist  <br> <small class="text-secondary">you have <span class="badge">{{items.length}}</span> items</small></h2>
