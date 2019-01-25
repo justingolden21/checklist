@@ -77,6 +77,7 @@ BUGS:
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
 <link rel="shortcut icon" type="image/png" href="check_icon.ico"/>
 <body>
@@ -84,7 +85,9 @@ BUGS:
 <script>
 let app = angular.module("listApp", []); 
 app.controller("listCtrl", function($scope) {
-  $scope.items = ["Homework", "Laundry", "Dishes"];
+  $scope.items = JSON.parse(Cookies.get('checklistItems') || '[]');
+  if($scope.items.length==0)
+	$scope.items = ["Homework", "Laundry", "Dishes"];
   $scope.night = false;
   $scope.addItem = function () {
     $scope.errortext = "";
@@ -96,7 +99,7 @@ app.controller("listCtrl", function($scope) {
 	else {
       $scope.errortext = "That item is already in your list";
     }
-      $('#textInput').focus();
+    $('#textInput').focus();
   }
   $scope.removeItem = function (idx) {
     $scope.errortext = "";
@@ -132,6 +135,13 @@ app.controller("listCtrl", function($scope) {
 	document.getElementById("downloadLink").download = "Checklist " + getFormattedDate();
 	document.getElementById("downloadLink").href = textFile;
   }
+  $scope.removeCookies = function() {
+  	Cookies.remove('checklistItems');
+  	alert('Cookies removed');
+  }
+  $scope.$watchCollection('items', function() {
+	Cookies.set('checklistItems', JSON.stringify($scope.items) );
+  });
 
 
 //https://stackoverflow.com/questions/19038919/is-it-possible-to-upload-a-text-file-to-input-in-html-js?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
@@ -210,7 +220,7 @@ function getFormattedDate() {
     </div>
   </div>
   <h4 class="bg-warning">{{errortext}}</h4>
-</form>
+
 
 <hr>
 
@@ -228,5 +238,8 @@ function getFormattedDate() {
 <p class="text-secondary">Made by justingolden21 &mdash; Check out my other projects on <a href="https://github.com/justingolden21">Github</a></p>
 <button class="btn btn-info" title="Github" onclick="window.open('https://github.com/justingolden21')" type="button"><i class="fab fa-github"></i></button>
 <button class="btn btn-info" title="Email" onclick="window.open('mailto:justingolden@rgbstudios.org')" type="button"><i class="fas fa-envelope"></i></button>
+<p class="text-secondary">This website uses cookies to remember your checklist <a href="" ng-click="removeCookies()">clear cookies</a></p>
+
+</form>
 </body>
 </html>
