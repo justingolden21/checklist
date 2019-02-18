@@ -1,0 +1,5 @@
+add copy buttons adjacent to items
+
+use cookies feature
+
+sort by date feature
